@@ -1,0 +1,229 @@
+/* ====== Base ====== */
+:root{
+  --ui-yellow: #ffd84d;
+  --ui-orange: #ff9a2a;
+  --ui-red: #ff3b00;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  font-family: sans-serif;
+  color: #fff;
+}
+
+/* ใส่ wrapper เพื่อเขย่าจอได้เนียนกว่า */
+#shake {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform: translate3d(0,0,0);
+  will-change: transform;
+  transition: transform 0.06s ease;
+}
+
+/* ====== Start Screen ====== */
+#start-screen {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 2000;
+  background: radial-gradient(1200px 800px at 50% 50%, rgba(255,255,255,0.04), transparent 60%);
+  padding: 24px;
+}
+.start-inner{ text-align:center; max-width: 780px; }
+
+#start-title {
+  font-size: 64px;
+  font-weight: 800;
+  animation: rainbowBlink 0.2s infinite alternate;
+  margin-bottom: 22px;
+  text-shadow: 0 0 20px #fff, 0 0 30px cyan;
+}
+@keyframes rainbowBlink {
+  0%   { color: red;     text-shadow: 0 0 10px red;     opacity: 1; }
+  20%  { color: orange;  text-shadow: 0 0 10px orange;  opacity: 0.8; }
+  40%  { color: yellow;  text-shadow: 0 0 10px yellow;  opacity: 0.6; }
+  60%  { color: lime;    text-shadow: 0 0 10px lime;    opacity: 0.8; }
+  80%  { color: cyan;    text-shadow: 0 0 10px cyan;    opacity: 1; }
+  100% { color: magenta; text-shadow: 0 0 10px magenta; opacity: 0.6; }
+}
+
+/* ===== วิธีเล่น + ลิงก์ GitHub ===== */
+.howto {
+  text-align: left;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin: 0 auto 18px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+}
+.howto h3{
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  letter-spacing: .2px;
+  color: var(--ui-yellow);
+  text-shadow: 0 0 8px rgba(255,216,77,.35);
+}
+.howto ul{
+  margin: 0 0 6px 18px;
+  padding: 0;
+  line-height: 1.6;
+  font-size: 15px;
+}
+.howto .tip{
+  font-size: 13px;
+  opacity: .85;
+  margin-top: 8px;
+}
+.gh-link{
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #1f1f1f, #121212);
+  border: 1px solid rgba(255,255,255,0.12);
+  text-decoration: none;
+  color: #fff;
+  font-weight: 700;
+}
+.gh-link:hover{ filter: brightness(1.1); }
+
+#start-btn {
+  padding: 18px 36px;
+  background: linear-gradient(180deg, #ffe66d, #ffcf2d);
+  color: #000;
+  font-size: 22px;
+  font-weight: 800;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(255, 208, 0, 0.35);
+}
+#start-btn:active { transform: translateY(1px); }
+
+/* ====== HUD ====== */
+#score {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 20px;
+  z-index: 1000;
+  display: none;
+  background: rgba(0,0,0,0.4);
+  padding: 6px 10px;
+  border-radius: 8px;
+  backdrop-filter: blur(2px);
+}
+
+/* ====== Target ====== */
+.img-wrapper {
+  position: absolute;
+  padding: 5px;
+  animation: flashyBorder 0.2s infinite alternate;
+  border: 3px dashed var(--ui-yellow);
+  border-radius: 8px;
+  user-select: none;
+}
+.img {
+  width: 120px;
+  height: auto;
+  display: block;
+  cursor: crosshair;
+  filter: drop-shadow(0 6px 18px rgba(255, 255, 255, 0.06));
+}
+@keyframes flashyBorder {
+  0% { border-color: var(--ui-yellow); box-shadow: 0 0 10px red, 0 0 20px orange; }
+  100%{ border-color: red;             box-shadow: 0 0 10px lime, 0 0 20px yellow; }
+}
+
+/* ====== Muzzle Flash (สมจริงขึ้น) ====== */
+.muzzle {
+  position: absolute;
+  pointer-events: none;
+  width: 160px;
+  height: 160px;
+  transform: translate(-50%, -50%);
+  z-index: 1200;
+  will-change: transform, opacity, filter;
+  animation: muzzlePop 0.16s ease-out forwards;
+  filter: blur(0.4px) contrast(1.2);
+}
+.m-core {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(255,255,220,0.95) 0%,
+      rgba(255,200,80,0.85) 40%,
+      rgba(255,120,10,0.65) 70%,
+      rgba(255,60,0,0.0) 100%);
+  box-shadow:
+    0 0 28px 14px rgba(255,210,120,0.95),
+    0 0 64px 28px rgba(255,120,0,0.55);
+}
+.m-cone {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 220px;
+  height: 80px;
+  transform: translate(0,-50%) rotate(8deg);
+  transform-origin: left center;
+  background:
+    radial-gradient(70% 50% at 0% 50%,
+      rgba(255,245,200,0.9) 0%,
+      rgba(255,180,60,0.7) 60%,
+      rgba(255,90,20,0.0) 100%);
+  filter: blur(1px);
+  border-top-right-radius: 100px 40px;
+  border-bottom-right-radius: 100px 40px;
+  clip-path: polygon(0% 0%, 100% 35%, 100% 65%, 0% 100%);
+}
+@keyframes muzzlePop {
+  0%   { transform: translate(-50%,-50%) scale(0.8) rotate(0deg);   opacity: 1; }
+  50%  { transform: translate(-50%,-50%) scale(1.5) rotate(12deg);  opacity: 0.9; }
+  100% { transform: translate(-50%,-50%) scale(2.2) rotate(-8deg);  opacity: 0; }
+}
+
+/* ====== Sparks ====== */
+.spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #ffd37a, #ff8b2a 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1100;
+  will-change: transform, opacity;
+  box-shadow: 0 0 8px 2px rgba(255,180,80,0.8);
+}
+
+/* ====== Screen Glow (แฟลชทั้งจอ) ====== */
+.screen-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1005;
+  background: radial-gradient(circle at var(--gx,50%) var(--gy,50%),
+    rgba(255,210,160,0.35), rgba(255,120,0,0.0) 60%);
+  animation: boomFlash 0.18s ease-out forwards;
+}
+@keyframes boomFlash {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+audio { display: none; }
+
+/* เลย์เอาต์บนจอเล็ก */
+@media (max-width: 520px){
+  #start-title{ font-size: 44px; }
+  .howto{ font-size: 14px; }
+}
